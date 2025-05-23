@@ -1,0 +1,48 @@
+services:
+  postgres:
+    image: postgres
+    container_name: postgres_container
+    environment:
+      POSTGRES_USER: saurabhs
+      POSTGRES_PASSWORD: saurabhs
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: saurabhs
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/data/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: rabbitmq_container
+    ports:
+      - "5672:5672"    # RabbitMQ messaging port
+      - "15672:15672"  # RabbitMQ Management UI port
+    networks:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres:
+  pgadmin:
+
+networks:
+  postgres:
+    driver: bridge
