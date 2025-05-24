@@ -53,7 +53,7 @@ public class ActivityService {
 
 //        Publish to RabbitMQ for AI recommendation
         try{
-               rabbitTemplate.convertAndSend(exchange, routingKey, activity);
+            rabbitTemplate.convertAndSend(exchange, routingKey, activity);
         }catch (Exception e){
             log.error("Failed to publish to RabbitMQ: ", e);
         }

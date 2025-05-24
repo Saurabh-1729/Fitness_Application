@@ -7,14 +7,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.Map;
 
 @Service
-
 public class GeminiService {
 
     private final WebClient webClient;
 
-    @Value("${GEMINI_API_KEY}")
+    @Value("${gemini.api.key}")
     private String GEM_API_KEY;
-    @Value("${GEMINI_API_URL}")
+    @Value("${gemini.api.url}")
     private String GEM_API_URL;
 
     public GeminiService(WebClient.Builder webClientBuilder) {
@@ -23,20 +22,24 @@ public class GeminiService {
 
     public String getAnswer(String question) {
         Map<String, Object> requestBody = Map.of(
-                "contents", new Object[]{
-                        Map.of(
-                                "text", question
-                        )
+                "contents", new Object[] {
+                        Map.of("parts", new Object[]{
+                                Map.of("text", question)
+                        })
                 }
         );
+
+        String uri = GEM_API_URL + GEM_API_KEY;
+
         // Make a request to the Gemini API with the question
         String response = webClient.post()
-            .uri(GEM_API_URL + GEM_API_KEY)
+                .uri(uri)
                 .header("Content-Type", "application/json")
                 .bodyValue(requestBody)
-            .retrieve()
-            .bodyToMono(String.class)
-            .block();
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
 
         // Return the response from the Gemini API
         return response;

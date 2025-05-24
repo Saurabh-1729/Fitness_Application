@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 // This is a recommendation model genetrated by the AI
-@Document(collection = "recommendations")
+@Document(collection = "recommendation")
 @Data
 @Builder
 @AllArgsConstructor
